@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %} DashBoard {% endblock %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid height100v">
+  <div class="container">
+    <div class="my-5 d-flex">
+      <img src="{{request.user.profile.photo.url}}" alt="" style="border-radius: 50%;object-fit: cover;" width="200" height="200">
+      <div class="ml-5 p-4">
+        <h1 class="display-4">Welcome to your DashBoard , {{request.user}}</h1>
+        <p class="lead">You can edit your <a href="{% url 'edit-profile'%}">profile</a> or <a href="{% url 'password_change' %}">Change password</a> .</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

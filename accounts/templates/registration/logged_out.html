@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %} Logged Out {% endblock %}
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-4  text-success">Logged Out</h1>
+    <p class="lead">You are successfully looged out.You can back <a href="{% url 'login' %}" class="text-success font-weight-bold">Log-in</a>.</p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container my-3 d-flex align-items-center">
+      <h2 class="align-self-start">{{request.user}}</h2>
+      {% thumbnail request.user.profile.photo "200x200" crop="center" as im%}
+        <a href="{{im.url}}" class="align-self-start"><img src="{{im.url}}" alt=""class="mx-5" style="border-radius: 50%;object-fit: cover;"></a>
+      {% endthumbnail %}
+      <div class="container mx-3 p-4">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ u_form|crispy }}
+          {{ p_form|crispy }}
+          <input type="submit" class="btn btn-success btn-lg px-5" style="border-radius: 30px;" value="Save!">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

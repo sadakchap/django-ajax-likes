@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %} post!detail {% endblock %}
+{% block content %}
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container text-center">
+      <h1 class="display-4">{{post.title}}</h1>
+      <div class="imgBx">
+        <a href="{{post.image.url}}"><img src="{{post.image.url}}" alt="{{post.title}}" title="{{post.title}}" class="img-fluid" style="height: 500px; width: 100%;object-fit: cover;"></a>
+      </div>
+      <div class="my-4 text-success bg-light p-5">
+        <p>{{post.body|linebreaks}}</p>
+      </div>
+      <div class="my-2">
+        <p class="text-muted">Date : {{post.publish|date}}</p>
+        <p><a href="#">{{post.author}}</a></p>
+      </div>
+      <div class="d-flex justify-content-between">
+        {% if post.user_likes.all %}
+          {% with total_likes=post.user_likes.count %}
+            <span class="total"><span class="count">{{total_likes}}</span> Like{{total_likes|pluralize}}</span>
+          {% endwith %}
+        {% else %}
+          <p>Be the First to Like it!!</p>
+        {% endif %}
+        <a href="#"
+          class="like btn btn-info"
+          data-id="{{ post.id }}"
+          data-action="{% if request.user in post.user_likes.all%}un{% endif %}like">
+          {% if request.user in post.user_likes.all %}
+            Unlike
+          {% else %}
+            Like
+          {% endif %}
+      </a>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+<script>
+  {% block domready %}
+    $('a.like').click(function(e){
+      e.preventDefault();
+      $.post('{% url "blog:like" %}',
+        {
+          id: $(this).data('id'),
+          action: $(this).data('action')
+        },
+        function(data){
+          console.log(data['status'])
+          if(data['status']=='ok')
+          {
+            let previous_action = $('a.like').data('action');
+            $('a.like').data('action',previous_action == 'like' ? 'unlike' : 'like');
+            $('a.like').text(previous_action == 'like' ? 'Unlike' : 'Like');
+
+            let previous_likes = parseInt($('span.total .count').text());
+            $('span.total .count').text(previous_action=='like'?previous_likes + 1:previous_likes - 1)
+          }
+        }
+      );
+    });
+  {% endblock %}
+</script>
